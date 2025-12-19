@@ -1,6 +1,6 @@
 'use client';
 
-import Navigation from '../components/navigation';
+import Navigation from '../components/Navigation';
 import { useState, useEffect } from 'react';
 
 interface Property {
@@ -54,9 +54,7 @@ export default function ManagePage() {
   const convertGoogleDriveUrl = (url: string) => {
     if (!url) return '';
     
-    // Check if it's a Google Drive link
     if (url.includes('drive.google.com/file/d/')) {
-      // Extract the file ID
       const match = url.match(/\/d\/([^\/]+)/);
       if (match && match[1]) {
         const fileId = match[1];
@@ -64,12 +62,10 @@ export default function ManagePage() {
       }
     }
     
-    // If it's not a Google Drive link, return as-is (for Imgur, direct URLs, etc.)
     return url;
   };
 
   const redactAddress = (address: string) => {
-    // Replace street number with XXX
     return address.replace(/^\d+\s/, 'XXX ');
   };
 
@@ -89,7 +85,6 @@ export default function ManagePage() {
     <div className="min-h-screen bg-white text-gray-900">
       <Navigation />
 
-      {/* Hero Section */}
       <section className="pt-32 pb-16 bg-gradient-to-br from-blue-600 to-blue-800 text-white">
         <div className="max-w-7xl mx-auto px-6">
           <h1 className="text-6xl font-bold mb-6">MANAGE</h1>
@@ -99,7 +94,6 @@ export default function ManagePage() {
         </div>
       </section>
 
-      {/* Our Services Section */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-4xl font-bold mb-4 text-center">Property Management Services</h2>
@@ -190,11 +184,10 @@ export default function ManagePage() {
             </div>
           </div>
 
-          {/* Stats */}
           <div className="grid md:grid-cols-4 gap-6 bg-gray-50 rounded-2xl p-8">
             <div className="text-center">
               <div className="text-4xl font-bold text-blue-600 mb-2">100+</div>
-              <div className="text-gray-600">Properties Managed</div>
+              <div className="text-gray-600">Units Managed</div>
             </div>
             <div className="text-center">
               <div className="text-4xl font-bold text-blue-600 mb-2">98%</div>
@@ -212,7 +205,6 @@ export default function ManagePage() {
         </div>
       </section>
 
-      {/* Available Rentals Section */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-4xl font-bold mb-4 text-center">Available Rental Vacancies</h2>
@@ -220,7 +212,6 @@ export default function ManagePage() {
             Quality apartments for immediate occupancy - Apply today!
           </p>
 
-          {/* Apply Now Button */}
           <div className="text-center mb-16">
             <a 
               href="/rental-application"
@@ -243,32 +234,32 @@ export default function ManagePage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {properties.map((property, index) => (
                 <div key={index} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300">
-                  <div className="h-48 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-4xl">
+                  <div className="h-64 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-4xl">
                     {property.imageUrl ? (
                       <img src={property.imageUrl} alt={property.address} className="w-full h-full object-cover" />
                     ) : (
                       '🏠'
                     )}
                   </div>
-                  <div className="p-6">
-                    <div className="flex justify-between items-start mb-3">
+                  <div className="p-5">
+                    <div className="flex justify-between items-start mb-2">
                       <h3 className="text-xl font-bold">Unit {property.unit}</h3>
                       {getStatusBadge(property.status)}
                     </div>
-                    <p className="text-gray-600 mb-4">{redactAddress(property.address)}</p>
-                    <p className="text-3xl font-bold text-blue-600 mb-4">${property.rent}/mo</p>
-                    <div className="space-y-2 mb-6">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Bedrooms:</span>
+                    <p className="text-gray-600 mb-3 text-sm">{redactAddress(property.address)}</p>
+                    <p className="text-3xl font-bold text-blue-600 mb-3">${property.rent}/mo</p>
+                    <div className="flex justify-between mb-3 text-sm">
+                      <div>
+                        <span className="text-gray-600">Bedrooms: </span>
                         <span className="font-semibold">{property.bedrooms}</span>
                       </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-600">Bathrooms:</span>
+                      <div>
+                        <span className="text-gray-600">Bathrooms: </span>
                         <span className="font-semibold">{property.bathrooms}</span>
                       </div>
                     </div>
                     {property.amenities && (
-                      <ul className="space-y-1 mb-6 text-sm">
+                      <ul className="space-y-1 mb-4 text-sm">
                         {property.amenities.split(',').slice(0, 3).map((amenity, i) => (
                           <li key={i} className="flex items-center text-gray-700">
                             <span className="text-green-600 mr-2">✓</span> {amenity.trim()}
@@ -276,9 +267,9 @@ export default function ManagePage() {
                         ))}
                       </ul>
                     )}
-                    <a href="/rental-application" className="block w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-center hover:bg-blue-700 transition-colors">
-                      Apply Now
-                    </a>
+                    <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                      Schedule Tour
+                    </button>
                   </div>
                 </div>
               ))}
@@ -287,7 +278,6 @@ export default function ManagePage() {
         </div>
       </section>
       
-      {/* Property Owners CTA */}
       <section className="py-24 bg-gradient-to-br from-blue-600 to-blue-800 text-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold mb-6">Property Owners: Let Us Manage Your Investment</h2>
@@ -309,7 +299,6 @@ export default function ManagePage() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="bg-gray-900 text-white py-12 text-center">
         <p className="opacity-80">&copy; 2024 NYHO - NY HomeOwner Inc. All rights reserved.</p>
         <p className="mt-2 text-sm opacity-70">Building Generational Wealth in the Bronx, NY</p>
