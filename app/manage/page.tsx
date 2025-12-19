@@ -1,9 +1,22 @@
 'use client';
 
 import Navigation from '../components/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+interface Property {
+  address: string;
+  unit: string;
+  bedrooms: string;
+  bathrooms: string;
+  rent: string;
+  amenities: string;
+  status: string;
+  imageUrl: string;
+}
 
 export default function ManagePage() {
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -20,6 +33,56 @@ export default function ManagePage() {
     additionalInfo: ''
   });
 
+  useEffect(() => {
+    fetchProperties();
+  }, []);
+
+  const fetchProperties = async () => {
+    try {
+      const SHEET_ID = '1D1UApUFAKQiJGuXbOHIOrKwhaSs-vWjUCsWzmJtgVMg';
+      const response = await fetch(
+        `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`
+      );
+      const text = await response.text();
+      const json = JSON.parse(text.substr(47).slice(0, -2));
+      
+      const rows = json.table.rows;
+      const propertyData: Property[] = rows.slice(1).map((row: any) => ({
+        address: row.c[0]?.v || '',
+        unit: row.c[1]?.v || '',
+        bedrooms: row.c[2]?.v || '',
+        bathrooms: row.c[3]?.v || '',
+        rent: row.c[4]?.v || '',
+        amenities: row.c[5]?.v || '',
+        status: row.c[6]?.v || '',
+        imageUrl: row.c[7]?.v || ''
+      }));
+
+      setProperties(propertyData);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching properties:', error);
+      setLoading(false);
+    }
+  };
+
+  const redactAddress = (address: string) => {
+    // Replace street number with XXX
+    return address.replace(/^\d+\s/, 'XXX ');
+  };
+
+  const getStatusBadge = (status: string) => {
+    const statusLower = status.toLowerCase();
+    if (statusLower === 'available') {
+      return <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">Available</span>;
+    } else if (statusLower === 'soon') {
+      return <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-semibold">Soon</span>;
+    } else if (statusLower === 'pending') {
+      return <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">Pending</span>;
+    }
+    return <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-semibold">{status}</span>;
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
@@ -30,7 +93,6 @@ export default function ManagePage() {
   const handleSubmit = (e: React.MouseEvent) => {
     e.preventDefault();
     alert('Thank you for your rental application! Our property management team will review it and contact you within 24-48 hours.');
-    // Reset form
     setFormData({
       firstName: '',
       lastName: '',
@@ -175,7 +237,7 @@ export default function ManagePage() {
         </div>
       </section>
 
-      {/* Available Rentals Section */}
+      {/* Available Rentals Section - NOW PULLING FROM GOOGLE SHEETS */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-4xl font-bold mb-4 text-center">Available Rental Vacancies</h2>
@@ -183,148 +245,59 @@ export default function ManagePage() {
             Quality apartments for immediate occupancy - Apply today!
           </p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Rental 1 */}
-            <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300">
-              <div className="h-48 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-4xl">
-                🏠
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-xl font-bold">Modern 3BR Apartment</h3>
-                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">Available</span>
-                </div>
-                <p className="text-gray-600 mb-4">4115 Wilder Avenue, Bronx</p>
-                <p className="text-3xl font-bold text-blue-600 mb-4">$3,777/mo</p>
-                <div className="space-y-2 mb-6">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Bedrooms:</span>
-                    <span className="font-semibold">3</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Bathrooms:</span>
-                    <span className="font-semibold">1</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Square Feet:</span>
-                    <span className="font-semibold">1.100 sq ft</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Available:</span>
-                    <span className="font-semibold">January 1, 2025</span>
-                  </div>
-                </div>
-                <ul className="space-y-1 mb-6 text-sm">
-                  <li className="flex items-center text-gray-700">
-                    <span className="text-green-600 mr-2">✓</span> New kitchen
-                  </li>
-                  <li className="flex items-center text-gray-700">
-                    <span className="text-green-600 mr-2">✓</span> Mini-Split Heating/Cooling
-                  </li>
-                  <li className="flex items-center text-gray-700">
-                    <span className="text-green-600 mr-2">✓</span> Near subway
-                  </li>
-                </ul>
-                <a href="#application" className="block w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-center hover:bg-blue-700 transition-colors">
-                  Apply Now
-                </a>
-              </div>
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="text-2xl text-gray-600">Loading properties...</div>
             </div>
-
-            {/* Rental 2 */}
-            <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300">
-              <div className="h-48 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white text-4xl">
-                🏢
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-xl font-bold">Spacious 3BR Unit</h3>
-                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">Available</span>
-                </div>
-                <p className="text-gray-600 mb-4">789 Morris Avenue, Bronx</p>
-                <p className="text-3xl font-bold text-blue-600 mb-4">$2,800/mo</p>
-                <div className="space-y-2 mb-6">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Bedrooms:</span>
-                    <span className="font-semibold">3</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Bathrooms:</span>
-                    <span className="font-semibold">2</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Square Feet:</span>
-                    <span className="font-semibold">1,300 sq ft</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Available:</span>
-                    <span className="font-semibold">December 15, 2024</span>
-                  </div>
-                </div>
-                <ul className="space-y-1 mb-6 text-sm">
-                  <li className="flex items-center text-gray-700">
-                    <span className="text-green-600 mr-2">✓</span> Renovated bathrooms
-                  </li>
-                  <li className="flex items-center text-gray-700">
-                    <span className="text-green-600 mr-2">✓</span> Washer/dryer in unit
-                  </li>
-                  <li className="flex items-center text-gray-700">
-                    <span className="text-green-600 mr-2">✓</span> Parking available
-                  </li>
-                </ul>
-                <a href="#application" className="block w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-center hover:bg-blue-700 transition-colors">
-                  Apply Now
-                </a>
-              </div>
+          ) : properties.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-2xl text-gray-600">No properties available at this time. Check back soon!</div>
             </div>
-
-            {/* Rental 3 */}
-            <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300">
-              <div className="h-48 bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white text-4xl">
-                🏘️
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-xl font-bold">Cozy 1BR Studio</h3>
-                  <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-semibold">Soon</span>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {properties.map((property, index) => (
+                <div key={index} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300">
+                  <div className="h-48 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-4xl">
+                    {property.imageUrl ? (
+                      <img src={property.imageUrl} alt={property.address} className="w-full h-full object-cover" />
+                    ) : (
+                      '🏠'
+                    )}
+                  </div>
+                  <div className="p-6">
+                    <div className="flex justify-between items-start mb-3">
+                      <h3 className="text-xl font-bold">Unit {property.unit}</h3>
+                      {getStatusBadge(property.status)}
+                    </div>
+                    <p className="text-gray-600 mb-4">{redactAddress(property.address)}</p>
+                    <p className="text-3xl font-bold text-blue-600 mb-4">${property.rent}/mo</p>
+                    <div className="space-y-2 mb-6">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Bedrooms:</span>
+                        <span className="font-semibold">{property.bedrooms}</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Bathrooms:</span>
+                        <span className="font-semibold">{property.bathrooms}</span>
+                      </div>
+                    </div>
+                    {property.amenities && (
+                      <ul className="space-y-1 mb-6 text-sm">
+                        {property.amenities.split(',').slice(0, 3).map((amenity, i) => (
+                          <li key={i} className="flex items-center text-gray-700">
+                            <span className="text-green-600 mr-2">✓</span> {amenity.trim()}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    <a href="#application" className="block w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-center hover:bg-blue-700 transition-colors">
+                      Apply Now
+                    </a>
+                  </div>
                 </div>
-                <p className="text-gray-600 mb-4">321 Webster Avenue, Bronx</p>
-                <p className="text-3xl font-bold text-blue-600 mb-4">$1,650/mo</p>
-                <div className="space-y-2 mb-6">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Bedrooms:</span>
-                    <span className="font-semibold">1</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Bathrooms:</span>
-                    <span className="font-semibold">1</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Square Feet:</span>
-                    <span className="font-semibold">650 sq ft</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Available:</span>
-                    <span className="font-semibold">January 15, 2025</span>
-                  </div>
-                </div>
-                <ul className="space-y-1 mb-6 text-sm">
-                  <li className="flex items-center text-gray-700">
-                    <span className="text-green-600 mr-2">✓</span> Hardwood floors
-                  </li>
-                  <li className="flex items-center text-gray-700">
-                    <span className="text-green-600 mr-2">✓</span> Natural light
-                  </li>
-                  <li className="flex items-center text-gray-700">
-                    <span className="text-green-600 mr-2">✓</span> Pet friendly
-                  </li>
-                </ul>
-                <a href="#application" className="block w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-center hover:bg-blue-700 transition-colors">
-                  Apply Now
-                </a>
-              </div>
+              ))}
             </div>
-          </div>
+          )}
         </div>
       </section>
 
