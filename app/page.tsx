@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import Navigation from './components/Navigation';
 
 export default function Home() {
-  const [scrolled, setScrolled] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -12,21 +12,6 @@ export default function Home() {
     service: '',
     message: ''
   });
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 100);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -50,28 +35,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
-      {/* Navigation */}
-      <nav className={`fixed w-full top-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-white shadow-lg' : 'bg-white/98 shadow-md'
-      }`}>
-        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div>
-            <div className="text-2xl font-bold text-blue-600">NYHO</div>
-            <div className="text-sm text-gray-600">NY HomeOwner Inc.</div>
-          </div>
-          <ul className="flex gap-8 items-center">
-            <li><button onClick={() => scrollToSection('home')} className="font-semibold hover:text-blue-600 transition-colors">Home</button></li>
-            <li><button onClick={() => scrollToSection('deal')} className="font-semibold hover:text-blue-600 transition-colors">DEAL</button></li>
-            <li><button onClick={() => scrollToSection('invest')} className="font-semibold hover:text-blue-600 transition-colors">INVEST</button></li>
-            <li><button onClick={() => scrollToSection('manage')} className="font-semibold hover:text-blue-600 transition-colors">MANAGE</button></li>
-            <li><button onClick={() => scrollToSection('about')} className="font-semibold hover:text-blue-600 transition-colors">About Us</button></li>
-            <li><button onClick={() => scrollToSection('contact')} className="font-semibold hover:text-blue-600 transition-colors">Contact Us</button></li>
-          </ul>
-        </div>
-      </nav>
+      <Navigation />
 
       {/* Hero Section */}
-      <section id="home" className="relative h-screen flex items-center justify-center text-white overflow-hidden mt-16">
+      <section className="relative h-screen flex items-center justify-center text-white overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-black/40 to-black/30 z-10"></div>
         <div className="absolute inset-0">
           <video 
@@ -94,16 +61,16 @@ export default function Home() {
           <p className="text-xl mb-8 opacity-90 leading-relaxed max-w-3xl mx-auto">
             We guide you from acquisition to management, transforming properties into profitable investments that grow your wealth for generations. NYHO finds the deals, builds the value, manages your assets, and scales your portfolio.
           </p>
-          <button 
-            onClick={() => scrollToSection('contact')}
-            className="bg-white text-blue-600 px-12 py-4 rounded-full font-bold text-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+          <a 
+            href="/contact"
+            className="inline-block bg-white text-blue-600 px-12 py-4 rounded-full font-bold text-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
           >
             Start Your Journey
-          </button>
+          </a>
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* Services Overview */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-5xl font-bold text-center mb-4">Our Comprehensive Real Estate Solutions</h2>
@@ -113,124 +80,49 @@ export default function Home() {
           
           <div className="grid md:grid-cols-3 gap-8">
             {/* DEAL Card */}
-            <div id="deal" className="bg-white rounded-2xl p-8 shadow-md hover:shadow-2xl transform hover:-translate-y-3 transition-all duration-300 border-t-4 border-blue-600">
+            <a href="/deal" className="bg-white rounded-2xl p-8 shadow-md hover:shadow-2xl transform hover:-translate-y-3 transition-all duration-300 border-t-4 border-blue-600 block">
               <div className="text-6xl mb-6 text-center">🤝</div>
               <h3 className="text-3xl font-bold mb-2 text-center">DEAL</h3>
               <p className="text-blue-600 font-semibold text-center mb-6">Real Estate Brokerage</p>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                We find and secure the right properties that align with your investment goals. Our brokerage team specializes in identifying opportunities in the Bronx market.
+                We find and secure the right properties that align with your investment goals. Browse our current inventory and connect with our brokerage team.
               </p>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-start">
-                  <span className="text-blue-600 font-bold mr-3">✓</span>
-                  <span className="text-gray-700">Property acquisition strategy</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-600 font-bold mr-3">✓</span>
-                  <span className="text-gray-700">Market analysis & deal sourcing</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-600 font-bold mr-3">✓</span>
-                  <span className="text-gray-700">Residential sales & rentals</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-600 font-bold mr-3">✓</span>
-                  <span className="text-gray-700">Negotiation & closing support</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-600 font-bold mr-3">✓</span>
-                  <span className="text-gray-700">Investment property matching</span>
-                </li>
-              </ul>
-              <button 
-                onClick={() => scrollToSection('contact')}
-                className="text-blue-600 font-semibold hover:underline"
-              >
-                Get Started →
-              </button>
-            </div>
+              <p className="text-blue-600 font-semibold text-center">
+                View Our Listings →
+              </p>
+            </a>
 
             {/* INVEST Card */}
-            <div id="invest" className="bg-white rounded-2xl p-8 shadow-md hover:shadow-2xl transform hover:-translate-y-3 transition-all duration-300 border-t-4 border-blue-600">
+            <a href="/invest" className="bg-white rounded-2xl p-8 shadow-md hover:shadow-2xl transform hover:-translate-y-3 transition-all duration-300 border-t-4 border-blue-600 block">
               <div className="text-6xl mb-6 text-center">🏗️</div>
               <h3 className="text-3xl font-bold mb-2 text-center">INVEST</h3>
               <p className="text-blue-600 font-semibold text-center mb-6">Project Management & Development</p>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                We transform properties into high-performing assets through strategic renovations, construction, and value-add improvements.
+                We transform properties into high-performing assets. View our portfolio of fix & flips, new construction, and upcoming projects.
               </p>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-start">
-                  <span className="text-blue-600 font-bold mr-3">✓</span>
-                  <span className="text-gray-700">Fix & flip project management</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-600 font-bold mr-3">✓</span>
-                  <span className="text-gray-700">New construction builds</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-600 font-bold mr-3">✓</span>
-                  <span className="text-gray-700">Property renovations & upgrades</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-600 font-bold mr-3">✓</span>
-                  <span className="text-gray-700">ROI optimization strategies</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-600 font-bold mr-3">✓</span>
-                  <span className="text-gray-700">Budget & timeline management</span>
-                </li>
-              </ul>
-              <button 
-                onClick={() => scrollToSection('contact')}
-                className="text-blue-600 font-semibold hover:underline"
-              >
-                Get Started →
-              </button>
-            </div>
+              <p className="text-blue-600 font-semibold text-center">
+                See Our Projects →
+              </p>
+            </a>
 
             {/* MANAGE Card */}
-            <div id="manage" className="bg-white rounded-2xl p-8 shadow-md hover:shadow-2xl transform hover:-translate-y-3 transition-all duration-300 border-t-4 border-blue-600">
+            <a href="/manage" className="bg-white rounded-2xl p-8 shadow-md hover:shadow-2xl transform hover:-translate-y-3 transition-all duration-300 border-t-4 border-blue-600 block">
               <div className="text-6xl mb-6 text-center">🏢</div>
               <h3 className="text-3xl font-bold mb-2 text-center">MANAGE</h3>
               <p className="text-blue-600 font-semibold text-center mb-6">Property Management</p>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                After your purchase, we manage your investment to maximize returns and minimize stress, ensuring consistent cash flow and appreciation.
+                Professional property management services. View available rentals and submit your rental application online.
               </p>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-start">
-                  <span className="text-blue-600 font-bold mr-3">✓</span>
-                  <span className="text-gray-700">Tenant screening & placement</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-600 font-bold mr-3">✓</span>
-                  <span className="text-gray-700">Rent collection & accounting</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-600 font-bold mr-3">✓</span>
-                  <span className="text-gray-700">Property maintenance & repairs</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-600 font-bold mr-3">✓</span>
-                  <span className="text-gray-700">24/7 emergency support</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-blue-600 font-bold mr-3">✓</span>
-                  <span className="text-gray-700">Performance reporting</span>
-                </li>
-              </ul>
-              <button 
-                onClick={() => scrollToSection('contact')}
-                className="text-blue-600 font-semibold hover:underline"
-              >
-                Get Started →
-              </button>
-            </div>
+              <p className="text-blue-600 font-semibold text-center">
+                View Vacancies →
+              </p>
+            </a>
           </div>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-24 bg-white">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
@@ -294,90 +186,6 @@ export default function Home() {
                 <div className="text-gray-600">Our Focus Market</div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-24 bg-gradient-to-br from-blue-800 to-blue-600 text-white">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-5xl font-bold mb-4">Let's Build Your Wealth Together</h2>
-            <p className="text-xl opacity-95">
-              Ready to start building generational assets? Get in touch with the NYHO team today.
-            </p>
-          </div>
-          
-          <div className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <input
-                type="text"
-                name="firstName"
-                placeholder="First Name"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                required
-                className="px-5 py-4 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
-              />
-              <input
-                type="text"
-                name="lastName"
-                placeholder="Last Name"
-                value={formData.lastName}
-                onChange={handleInputChange}
-                required
-                className="px-5 py-4 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
-              />
-            </div>
-            <div className="grid md:grid-cols-2 gap-6">
-              <input
-                type="email"
-                name="email"
-                placeholder="Email Address"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-                className="px-5 py-4 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
-              />
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Phone Number"
-                value={formData.phone}
-                onChange={handleInputChange}
-                required
-                className="px-5 py-4 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
-              />
-            </div>
-            <select
-              name="service"
-              value={formData.service}
-              onChange={handleInputChange}
-              required
-              className="w-full px-5 py-4 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
-            >
-              <option value="">Select a Service</option>
-              <option value="deal">DEAL - Real Estate Brokerage</option>
-              <option value="invest">INVEST - Project Management</option>
-              <option value="manage">MANAGE - Property Management</option>
-              <option value="all">Full Service - Complete Solution</option>
-              <option value="other">General Inquiry</option>
-            </select>
-            <textarea
-              name="message"
-              placeholder="Tell us about your real estate goals..."
-              value={formData.message}
-              onChange={handleInputChange}
-              required
-              rows={6}
-              className="w-full px-5 py-4 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white resize-none"
-            ></textarea>
-            <button
-              onClick={handleSubmit}
-              className="w-full bg-white text-blue-600 py-4 rounded-full font-bold text-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
-            >
-              Start Your Journey
-            </button>
           </div>
         </div>
       </section>
