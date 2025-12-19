@@ -57,7 +57,7 @@ export default function ManagePage() {
         <div className="max-w-7xl mx-auto px-6">
           <h1 className="text-6xl font-bold mb-6">MANAGE</h1>
           <p className="text-2xl opacity-95 max-w-3xl">
-            Professional property management services. Find your next home or let us manage your investment property with care and expertise.
+            Professional property management services. Allow us to manage your investment property with care and expertise.
           </p>
         </div>
       </section>
@@ -178,9 +178,9 @@ export default function ManagePage() {
       {/* Available Rentals Section */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-4 text-center">Current Rental Vacancies</h2>
+          <h2 className="text-4xl font-bold mb-4 text-center">Available Rental Vacancies</h2>
           <p className="text-xl text-gray-600 text-center mb-16 max-w-3xl mx-auto">
-            Quality apartments in prime Bronx locations - Apply today!
+            Quality apartments for immediate occupancy - Apply today!
           </p>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -191,15 +191,15 @@ export default function ManagePage() {
               </div>
               <div className="p-6">
                 <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-xl font-bold">Modern 2BR Apartment</h3>
+                  <h3 className="text-xl font-bold">Modern 3BR Apartment</h3>
                   <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">Available</span>
                 </div>
-                <p className="text-gray-600 mb-4">456 Grand Concourse, Bronx</p>
-                <p className="text-3xl font-bold text-blue-600 mb-4">$2,200/mo</p>
+                <p className="text-gray-600 mb-4">4115 Wilder Avenue, Bronx</p>
+                <p className="text-3xl font-bold text-blue-600 mb-4">$3,777/mo</p>
                 <div className="space-y-2 mb-6">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Bedrooms:</span>
-                    <span className="font-semibold">2</span>
+                    <span className="font-semibold">3</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Bathrooms:</span>
@@ -207,7 +207,7 @@ export default function ManagePage() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Square Feet:</span>
-                    <span className="font-semibold">900 sq ft</span>
+                    <span className="font-semibold">1.100 sq ft</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Available:</span>
@@ -216,10 +216,10 @@ export default function ManagePage() {
                 </div>
                 <ul className="space-y-1 mb-6 text-sm">
                   <li className="flex items-center text-gray-700">
-                    <span className="text-green-600 mr-2">✓</span> Updated kitchen
+                    <span className="text-green-600 mr-2">✓</span> New kitchen
                   </li>
                   <li className="flex items-center text-gray-700">
-                    <span className="text-green-600 mr-2">✓</span> Heat & hot water included
+                    <span className="text-green-600 mr-2">✓</span> Mini-Split Heating/Cooling
                   </li>
                   <li className="flex items-center text-gray-700">
                     <span className="text-green-600 mr-2">✓</span> Near subway
