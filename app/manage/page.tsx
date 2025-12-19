@@ -17,21 +17,6 @@ interface Property {
 export default function ManagePage() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    currentAddress: '',
-    employmentStatus: '',
-    monthlyIncome: '',
-    moveInDate: '',
-    numberOfOccupants: '',
-    hasPets: '',
-    creditScore: '',
-    propertyInterested: '',
-    additionalInfo: ''
-  });
 
   useEffect(() => {
     fetchProperties();
@@ -55,7 +40,7 @@ export default function ManagePage() {
         rent: row.c[4]?.v || '',
         amenities: row.c[5]?.v || '',
         status: row.c[6]?.v || '',
-        imageUrl: row.c[7]?.v || ''
+        imageUrl: convertGoogleDriveUrl(row.c[7]?.v || '')
       }));
 
       setProperties(propertyData);
@@ -64,6 +49,23 @@ export default function ManagePage() {
       console.error('Error fetching properties:', error);
       setLoading(false);
     }
+  };
+
+  const convertGoogleDriveUrl = (url: string) => {
+    if (!url) return '';
+    
+    // Check if it's a Google Drive link
+    if (url.includes('drive.google.com/file/d/')) {
+      // Extract the file ID
+      const match = url.match(/\/d\/([^\/]+)/);
+      if (match && match[1]) {
+        const fileId = match[1];
+        return `https://drive.google.com/uc?export=view&id=${fileId}`;
+      }
+    }
+    
+    // If it's not a Google Drive link, return as-is (for Imgur, direct URLs, etc.)
+    return url;
   };
 
   const redactAddress = (address: string) => {
@@ -81,33 +83,6 @@ export default function ManagePage() {
       return <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">Pending</span>;
     }
     return <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-semibold">{status}</span>;
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = (e: React.MouseEvent) => {
-    e.preventDefault();
-    alert('Thank you for your rental application! Our property management team will review it and contact you within 24-48 hours.');
-    setFormData({
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      currentAddress: '',
-      employmentStatus: '',
-      monthlyIncome: '',
-      moveInDate: '',
-      numberOfOccupants: '',
-      hasPets: '',
-      creditScore: '',
-      propertyInterested: '',
-      additionalInfo: ''
-    });
   };
 
   return (
@@ -237,7 +212,7 @@ export default function ManagePage() {
         </div>
       </section>
 
-      {/* Available Rentals Section - NOW PULLING FROM GOOGLE SHEETS */}
+      {/* Available Rentals Section */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-4xl font-bold mb-4 text-center">Available Rental Vacancies</h2>
